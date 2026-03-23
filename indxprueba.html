@@ -109,6 +109,27 @@
       border-radius: 12px;
       padding: 12px 30px;
       border: none;
+      transition: 0.3s;
+    }
+
+    .btn-nodox:hover {
+      background-color: var(--nodox-blue);
+      color: white;
+    }
+
+    .btn-whatsapp {
+      background-color: #25D366;
+      color: white;
+      font-weight: 700;
+      border-radius: 12px;
+      padding: 12px 30px;
+      border: none;
+      transition: 0.3s;
+    }
+
+    .btn-whatsapp:hover {
+      background-color: #128C7E;
+      color: white;
     }
 
     .testimonial-author {
@@ -121,6 +142,12 @@
     .testimonial-role {
       font-size: 0.85rem;
       color: #666;
+    }
+
+    .contact-footer-section {
+      padding: 80px 0;
+      background-color: var(--white);
+      border-top: 1px solid #eee;
     }
   </style>
 </head>
@@ -254,16 +281,47 @@
                 <div class="accordion-body text-muted">Sí, todos nuestros productos cuentan con garantía oficial del fabricante gestionada directamente con nosotros.</div>
               </div>
             </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f3">¿Qué métodos de pago aceptan?</button>
+              </h2>
+              <div id="f3" class="accordion-collapse collapse" data-bs-parent="#faqNodox">
+                <div class="accordion-body text-muted">Aceptamos transferencias bancarias, cheques (previo a liberación) y tarjetas de crédito con opción a Cuotas. También ofrecemos crédito corporativo sujeto a evaluación.</div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f4">¿Ofrecen servicios de instalación y configuración?</button>
+              </h2>
+              <div id="f4" class="accordion-collapse collapse" data-bs-parent="#faqNodox">
+                <div class="accordion-body text-muted">Sí, contamos con un equipo técnico certificado para la implementación de hardware, configuración de redes y puesta en marcha de software empresarial.</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <footer class="py-5 bg-dark text-white text-center">
+  <section class="contact-footer-section" id="contacto">
+    <div class="container text-center">
+      <h2 class="fw-bold mb-4">¿Necesitas una cotización personalizada?</h2>
+      <p class="text-muted mb-5">Nuestro equipo está listo para asesorarte con las mejores opciones tecnológicas.</p>
+      <div class="d-flex flex-column flex-md-row justify-content-center gap-3">
+        <a href="mailto:carla.chour@promotorsgt.com" class="btn btn-nodox btn-lg">
+          <i class="bi bi-envelope-fill me-2"></i> ENVIAR CORREO
+        </a>
+        <a href="https://wa.me/50245917700?text=Hola%20Nodox,%20necesito%20una%20cotización" target="_blank" class="btn btn-whatsapp btn-lg">
+          <i class="bi bi-whatsapp me-2"></i> ESCRIBIR A WHATSAPP
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-4 bg-dark text-white text-center">
     <div class="container">
-      <img src="nodoxblanco.png" alt="Nodox" height="35" class="mb-4">
-      <p class="small opacity-50">© 2026 Nodox Guatemala | carla.chour@promotorsgt.com</p>
+      <img src="nodoxblanco.png" alt="Nodox" height="30" class="mb-3 opacity-75">
+      <p class="small opacity-50 mb-0">© 2026 Nodox Guatemala | Todos los derechos reservados.</p>
     </div>
   </footer>
 
