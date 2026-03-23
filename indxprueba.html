@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Nodox Guatemala - Soluciones Tecnológicas Corporativas</title>
+  <title>Nodox Guatemala - Soluciones Corporativas</title>
   
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
@@ -14,8 +14,8 @@
       --nodox-yellow: #ffb100;
       --bg-light: #f4f7f9;
       --white: #ffffff;
+      --radius-lg: 20px;
       --shadow-modern: 0 10px 30px rgba(0,0,0,0.05);
-      --radius-lg: 20px; /* Basado en la imagen adjunta */
     }
 
     body {
@@ -32,9 +32,10 @@
 
     /* Hero */
     .hero-section {
-      padding: 80px 0;
-      background: linear-gradient(rgba(0,26,51,0.9), rgba(0,26,51,0.9)), url('https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg');
+      padding: 100px 0;
+      background: linear-gradient(rgba(0,26,51,0.85), rgba(0,26,51,0.85)), url('https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg');
       background-size: cover;
+      background-position: center;
       color: white;
       text-align: center;
     }
@@ -46,65 +47,59 @@
       border: none;
       box-shadow: var(--shadow-modern);
       padding: 30px;
-      transition: transform 0.3s ease;
       height: 100%;
+      transition: transform 0.3s ease;
     }
 
     .card-modern:hover {
       transform: translateY(-5px);
     }
 
-    .icon-box {
-      width: 60px;
-      height: 60px;
-      background: rgba(255, 177, 0, 0.1);
-      color: var(--nodox-yellow);
-      border-radius: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
-
-    /* FAQ Accordion */
-    .accordion-item {
-      border: none;
-      margin-bottom: 15px;
-      border-radius: var(--radius-lg) !important;
+    /* Carrusel de Marcas Animado */
+    .brands-section {
+      background: white;
+      padding: 60px 0;
       overflow: hidden;
-      box-shadow: var(--shadow-modern);
+    }
+    
+    .brands-track {
+      display: flex;
+      width: calc(250px * 14);
+      animation: scroll 30s linear infinite;
     }
 
-    .accordion-button {
-      font-weight: 600;
-      color: var(--nodox-blue);
-      padding: 20px;
-    }
-
-    .accordion-button:not(.collapsed) {
-      background-color: var(--nodox-yellow);
-      color: var(--nodox-blue);
-    }
-
-    /* Testimonios */
-    .testimonial-card {
-      border-left: 5px solid var(--nodox-yellow);
-      font-style: italic;
-    }
-
-    /* Marcas */
     .brand-logo {
-      height: 50px;
+      width: 150px;
+      height: 80px;
+      object-fit: contain;
+      margin: 0 40px;
       filter: grayscale(100%);
       opacity: 0.6;
       transition: 0.3s;
-      margin: 20px;
     }
 
     .brand-logo:hover {
       filter: grayscale(0%);
       opacity: 1;
+    }
+
+    @keyframes scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(calc(-250px * 7)); }
+    }
+
+    /* FAQ */
+    .accordion-item {
+      border: none;
+      margin-bottom: 15px;
+      border-radius: var(--radius-lg) !important;
+      box-shadow: var(--shadow-modern);
+      overflow: hidden;
+    }
+
+    .accordion-button:not(.collapsed) {
+      background-color: var(--nodox-yellow);
+      color: var(--nodox-blue);
     }
 
     .btn-nodox {
@@ -116,9 +111,16 @@
       border: none;
     }
 
-    .btn-nodox:hover {
-      background-color: var(--nodox-blue);
-      color: white;
+    .testimonial-author {
+      font-weight: 700;
+      color: var(--nodox-blue);
+      margin-top: 15px;
+      display: block;
+    }
+
+    .testimonial-role {
+      font-size: 0.85rem;
+      color: #666;
     }
   </style>
 </head>
@@ -127,8 +129,8 @@
   <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
     <div class="container">
       <a class="navbar-brand" href="#"><img src="nodoxblanco.png" alt="Nodox" height="40"></a>
-      <div class="ms-auto d-none d-md-block text-white">
-        <small><i class="bi bi-telephone"></i> +502 4591 7700</small>
+      <div class="ms-auto d-none d-md-block text-white text-end">
+        <small>Ciudad de Guatemala<br>+502 4591 7700</small>
       </div>
     </div>
   </nav>
@@ -136,7 +138,7 @@
   <section class="hero-section">
     <div class="container">
       <h1 class="display-4 fw-bold mb-3">Soluciones Tecnológicas Corporativas</h1>
-      <p class="lead mb-4">Hardware y Software con Entrega en 24 horas</p>
+      <p class="lead mb-5">Entrega en 24 horas | Hardware y Software Multimarca</p>
       <a href="#contacto" class="btn btn-nodox btn-lg">SOLICITAR COTIZACIÓN</a>
     </div>
   </section>
@@ -149,70 +151,88 @@
       </div>
       <div class="row g-4">
         <div class="col-md-4">
-          <div class="card-modern">
-            <div class="icon-box"><i class="bi bi-truck"></i></div>
+          <div class="card-modern text-center">
+            <i class="bi bi-truck display-5 text-warning mb-3"></i>
             <h4>Entrega Rápida</h4>
-            <p class="text-muted">Entregamos en 24 horas en la ciudad de Guatemala y 72 horas a nivel nacional.</p>
+            <p class="text-muted small">Entregamos en 24 horas en la ciudad de Guatemala y 72 horas a nivel nacional.</p>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="card-modern">
-            <div class="icon-box"><i class="bi bi-shield-check"></i></div>
+          <div class="card-modern text-center">
+            <i class="bi bi-shield-check display-5 text-warning mb-3"></i>
             <h4>Productos Originales</h4>
-            <p class="text-muted">Todos nuestros productos son 100% originales con garantía oficial del fabricante.</p>
+            <p class="text-muted small">Todos nuestros productos son 100% originales con garantía oficial del fabricante.</p>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="card-modern">
-            <div class="icon-box"><i class="bi bi-headset"></i></div>
+          <div class="card-modern text-center">
+            <i class="bi bi-headset display-5 text-warning mb-3"></i>
             <h4>Soporte Técnico</h4>
-            <p class="text-muted">Asesoría especializada antes, durante y después de tu compra corporativa.</p>
+            <p class="text-muted small">Asesoría especializada antes, durante y después de tu compra corporativa.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="py-5 bg-white">
-    <div class="container text-center">
-      <h3 class="fw-bold mb-4">Empresas que confían en nosotros</h3>
-      <div class="d-flex flex-wrap justify-content-center align-items-center">
-        <img src="hp-logo.png" class="brand-logo" alt="HP">
-        <img src="dell-logo.png" class="brand-logo" alt="Dell">
-        <img src="lenovo-logo.png" class="brand-logo" alt="Lenovo">
-        <img src="cisco-logo.png" class="brand-logo" alt="Cisco">
-        <img src="microsoft-logo.png" class="brand-logo" alt="Microsoft">
+  <section class="brands-section border-top border-bottom">
+    <div class="container mb-4 text-center">
+      <h3 class="fw-bold">Marcas que distribuimos</h3>
+    </div>
+    <div class="brands-track">
+      <img src="hp-logo.png" class="brand-logo" alt="HP">
+      <img src="dell-logo.png" class="brand-logo" alt="Dell">
+      <img src="lenovo-logo.png" class="brand-logo" alt="Lenovo">
+      <img src="cisco-logo.png" class="brand-logo" alt="Cisco">
+      <img src="microsoft-logo.png" class="brand-logo" alt="Microsoft">
+      <img src="jbl-logo.png" class="brand-logo" alt="JBL">
+      <img src="poly-logo.png" class="brand-logo" alt="Plantronics">
+      <img src="hp-logo.png" class="brand-logo" alt="HP">
+      <img src="dell-logo.png" class="brand-logo" alt="Dell">
+      <img src="lenovo-logo.png" class="brand-logo" alt="Lenovo">
+      <img src="cisco-logo.png" class="brand-logo" alt="Cisco">
+      <img src="microsoft-logo.png" class="brand-logo" alt="Microsoft">
+      <img src="jbl-logo.png" class="brand-logo" alt="JBL">
+      <img src="poly-logo.png" class="brand-logo" alt="Plantronics">
+    </div>
+  </section>
+
+  <section class="py-5 bg-light">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="fw-bold">Lo que dicen nuestros clientes</h2>
+        <p class="text-muted">Empresas que confían en nuestros productos y servicios</p>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card-modern">
+            <i class="bi bi-quote fs-1 text-warning opacity-50"></i>
+            <p class="fst-italic text-muted">"Hemos equipado toda nuestra oficina con hardware de Nodox. Su servicio de entrega en 24 horas nos ha salvado en múltiples ocasiones."</p>
+            <span class="testimonial-author">Carlos Méndez</span>
+            <span class="testimonial-role">Director de TI, Empresa Financiera</span>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card-modern">
+            <i class="bi bi-quote fs-1 text-warning opacity-50"></i>
+            <p class="fst-italic text-muted">"Las licencias de software que adquirimos han sido impecables. Gran soporte técnico y siempre disponibles para resolver dudas."</p>
+            <span class="testimonial-author">María González</span>
+            <span class="testimonial-role">Gerente, Consultora Internacional</span>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card-modern">
+            <i class="bi bi-quote fs-1 text-warning opacity-50"></i>
+            <p class="fst-italic text-muted">"La relación calidad-precio de sus productos es excelente. Hemos reducido costos sin sacrificar rendimiento ni calidad."</p>
+            <span class="testimonial-author">Javier López</span>
+            <span class="testimonial-role">CEO, Startup Tecnológica</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <section class="py-5">
-    <div class="container">
-      <h2 class="text-center fw-bold mb-5">Lo que dicen nuestros clientes</h2>
-      <div class="row g-4">
-        <div class="col-md-4">
-          <div class="card-modern testimonial-card">
-            <p>"Hemos equipado toda nuestra oficina con hardware de Nodox. Su servicio de entrega en 24 horas es impecable."</p>
-            <footer class="blockquote-footer mt-2">Carlos Méndez, <cite>Director IT</cite></footer>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card-modern testimonial-card">
-            <p>"Gran soporte técnico y asesoría. Nos ayudaron a elegir la mejor opción de licencias para nuestro equipo."</p>
-            <footer class="blockquote-footer mt-2">María González, <cite>Gerente Administrativa</cite></footer>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card-modern testimonial-card">
-            <p>"La relación calidad-precio es excelente. Se han convertido en nuestro proveedor tecnológico de confianza."</p>
-            <footer class="blockquote-footer mt-2">Javier López, <cite>CEO Startup</cite></footer>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="py-5 bg-light">
     <div class="container">
       <h2 class="text-center fw-bold mb-5">Preguntas Frecuentes</h2>
       <div class="row justify-content-center">
@@ -220,38 +240,18 @@
           <div class="accordion" id="faqNodox">
             <div class="accordion-item">
               <h2 class="accordion-header">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#f1">
-                  ¿Cuál es el tiempo de entrega?
-                </button>
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#f1">¿Cuál es el tiempo de entrega?</button>
               </h2>
               <div id="f1" class="accordion-collapse collapse show" data-bs-parent="#faqNodox">
-                <div class="accordion-body">
-                  Entregamos en 24 horas en la Ciudad de Guatemala y 72 horas hábiles en el interior del país.
-                </div>
+                <div class="accordion-body text-muted">Entregamos en 24 horas en la Ciudad de Guatemala y 72 horas hábiles en el interior del país.</div>
               </div>
             </div>
             <div class="accordion-item">
               <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f2">
-                  ¿Emiten factura contable?
-                </button>
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f2">¿Ofrecen garantía oficial?</button>
               </h2>
               <div id="f2" class="accordion-collapse collapse" data-bs-parent="#faqNodox">
-                <div class="accordion-body">
-                  Sí, emitimos factura con NIT para todas las compras. Solo debe proporcionar sus datos fiscales al cotizar.
-                </div>
-              </div>
-            </div>
-            <div class="accordion-item">
-              <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f3">
-                  ¿Los productos tienen garantía?
-                </button>
-              </h2>
-              <div id="f3" class="accordion-collapse collapse" data-bs-parent="#faqNodox">
-                <div class="accordion-body">
-                  Todos nuestros equipos cuentan con garantía oficial del fabricante, gestionada directamente a través de nosotros.
-                </div>
+                <div class="accordion-body text-muted">Sí, todos nuestros productos cuentan con garantía oficial del fabricante gestionada directamente con nosotros.</div>
               </div>
             </div>
           </div>
@@ -260,10 +260,10 @@
     </div>
   </section>
 
-  <footer class="py-4 bg-dark text-white text-center">
+  <footer class="py-5 bg-dark text-white text-center">
     <div class="container">
-      <p class="mb-1">© 2026 Nodox Guatemala</p>
-      <p class="small text-muted">carla.chour@promotorsgt.com | +502 4591 7700</p>
+      <img src="nodoxblanco.png" alt="Nodox" height="35" class="mb-4">
+      <p class="small opacity-50">© 2026 Nodox Guatemala | carla.chour@promotorsgt.com</p>
     </div>
   </footer>
 
