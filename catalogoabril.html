@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Creador Catalogo Nodox Milkinientos</title>
+    <title>Nodox Catalogo</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 
@@ -17,7 +17,32 @@
         * { box-sizing: border-box; }
         body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; background: var(--nodox-gray-bg); color: #333; }
         
-        /* Panel de Control */
+        /* --- BURBUJA DINÁMICA DE JORGE (Solo Web) --- */
+        .jorge-bubble {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 260px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-left: 5px solid var(--nodox-red);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            z-index: 9999;
+            font-size: 13px;
+            transition: all 0.5s ease;
+        }
+        .jorge-bubble strong { color: var(--nodox-red); display: block; margin-bottom: 5px; font-size: 14px; }
+        #jorge-text { transition: opacity 0.5s ease; opacity: 1; min-height: 40px; display: block; }
+        .fade-out { opacity: 0 !important; }
+
+        @keyframes slideIn {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* UI Control */
         .no-print-zone { 
             background: white; padding: 20px; border-bottom: 4px solid var(--nodox-red); 
             text-align: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
@@ -36,7 +61,7 @@
             page-break-after: always;
         }
 
-        /* CARÁTULA LIMPIA */
+        /* Carátula Limpia */
         .separator-page { padding: 0 !important; justify-content: center; align-items: center; background: var(--nodox-black); }
         .separator-img { position: absolute; width: 100%; height: 100%; object-fit: cover; z-index: 1; opacity: 0.8; display: none; }
         .separator-content { 
@@ -68,40 +93,36 @@
         .card-sku { font-size: 10px; color: #555; font-weight: bold; background: #eee; padding: 2px 4px; border-radius: 3px; }
         .card-specs { font-size: 9.5px; color: #444; line-height: 1.3; border-top: 1px solid #eee; padding-top: 8px; margin-top: 8px; flex-grow: 1; overflow: hidden; }
         
-        /* PIE DE PÁGINA CON COLOR FORZADO */
         .page-footer { border-top: 1px solid #eee; padding-top: 10px; margin-top: auto; display: flex; justify-content: space-between; align-items: center; font-size: 10px; color: #777; }
         .ws-link { 
-            background-color: var(--ws-green) !important; 
-            color: white !important; 
-            padding: 6px 15px; 
-            border-radius: 20px; 
-            text-decoration: none; 
-            font-weight: bold; 
-            display: flex; 
-            align-items: center; 
-            gap: 5px;
-            -webkit-print-color-adjust: exact; /* Fuerza color en PDF */
-            print-color-adjust: exact;
+            background-color: var(--ws-green) !important; color: white !important; 
+            padding: 6px 15px; border-radius: 20px; text-decoration: none; font-weight: bold; 
+            display: flex; align-items: center; gap: 5px; -webkit-print-color-adjust: exact; print-color-adjust: exact;
         }
 
         [contenteditable="true"]:focus { outline: 2px solid var(--nodox-red); background: #fffde7; }
 
+        /* CONFIG DE IMPRESIÓN */
         @media print {
             @page { size: letter; margin: 0; }
             body { background: white; }
-            .no-print-zone, .image-overlay { display: none !important; }
+            .no-print-zone, .image-overlay, .jorge-bubble { display: none !important; }
             #catalog-container { width: 100%; padding: 0; }
             .pdf-page { margin: 0; box-shadow: none; border: none; width: 100%; height: 100vh; padding: 12mm; }
-            .ws-link { background-color: #25D366 !important; color: white !important; }
         }
     </style>
 </head>
 <body>
 
+<div class="jorge-bubble" id="bubble">
+    <strong>✨ Reconocimiento Nodox</strong>
+    <span id="jorge-text">Cargando inspiración...</span>
+</div>
+
 <div class="no-print-zone">
-    <h1 style="margin:0">CATALAGO Nodox <span style="color:var(--nodox-red)">Milkinientos</span></h1>
+    <h1 style="margin:0">CATALAGO Nodox Products <span style="color:var(--nodox-red)">Milkinientos</span></h1>
     <input type="file" id="csv-input" accept=".csv" style="display:none" onchange="handleCSV(this)">
-    <button class="btn btn-upload" onclick="document.getElementById('csv-input').click()">📁 1. Cargar CSVs</button>
+    <button class="btn btn-upload" onclick="document.getElementById('csv-input').click()">📁 1. Cargar CSV</button>
     <button id="print-btn" class="btn btn-print" onclick="window.print()" style="display:none;">🖨️ 2. Guardar PDF (Tamaño Carta)</button>
 </div>
 
@@ -111,6 +132,46 @@
     const WHATSAPP_NUMBER = "50245917700";
     const LOGO = "logotipoNodox.png";
     let sectionIdx = 0;
+
+    // Carrusel de textos para Jorge
+    const frasesJorge = [
+        "Colosenses 3:23: Cuando hagan cualquier trabajo, háganlo de todo corazón, como para el Señor.",
+        "«¿Pero cómo podrías vivir sin tener una historia que contar?» Fiódor Dostoievski, Noches blancas.",
+        "Un líder enfocado en la innovación y el detalle llevara a Nodox al espacio! Espera... Ya estuvimos en el espacio",
+        "«El precio de amar mucho a alguien es no poder amar a nadie de nuevo.» Fiódor Dostoievski",
+        "1 Corintios 13:4: El amor es paciente, es bondadoso.",
+        "Él fortalece al cansado y acrecienta las fuerzas del débil. (Isaías 40:29)",
+        "Porque para Dios no hay nada imposible.(Lucas 1:37)",
+        "Te estoy tejiendo un par de alas, sé que te irás cuando termine... pero no soporto verte sin volar (Andrés Castuera- Micher)",
+        "Soy la distancia que pones entre todos los momentos que seremos (Leonard Cohen)",
+        "Normalmente sólo vemos lo que queremos ver; tanto es así, que a veces lo vemos donde no está (Eric Hoffer)",
+        "Juan 16:33:  Les he dicho estas cosas para que en mí tengan paz. En el mundo tendrán aflicción. Pero ¡ánimo!, yo he vencido al mundo.",
+        "Marcos 11:24:  Por eso les digo: todo lo que pidan en oración, crean que ya lo han recibido, y les será concedido.",
+        "Oigo pasar el viento, y creo que solo para oír pasar el viento vale la pena haber nacido (Fernando Pessoa)",
+        " Yo no puedo callar cuando el corazón me da gritos (Fiódor Dostoievski)",
+        "La fe es el pájaro que canta cuando el amanecer todavía está oscuro (R. Tagore)",
+        "No hay que confundir la verdad con la opinión de la mayoría",
+        "La razón siempre ha existido, pero no siempre en una forma razonable",
+        "Me falta una verdad, me sobran cien excusas",
+        "Vuelva a mi, la extraño. Me dejo pegar, se cocinar y no estoy muy manoseado. Ademas ya adelgazo el joven",
+
+    ];
+    let fraseActual = 0;
+
+    function rotarFrases() {
+        const txtEl = document.getElementById('jorge-text');
+        txtEl.classList.add('fade-out');
+        
+        setTimeout(() => {
+            fraseActual = (fraseActual + 1) % frasesJorge.length;
+            txtEl.innerText = frasesJorge[fraseActual];
+            txtEl.classList.remove('fade-out');
+        }, 500);
+    }
+
+    // Iniciar rotación cada 5 segundos
+    setInterval(rotarFrases, 5000);
+    window.onload = () => { document.getElementById('jorge-text').innerText = frasesJorge[0]; };
 
     function handleCSV(input) {
         const file = input.files[0];
@@ -135,15 +196,13 @@
     function addSection(data) {
         const container = document.getElementById('catalog-container');
         sectionIdx++;
-        
         const sep = document.createElement('div');
         sep.className = 'pdf-page separator-page';
         const sid = `s-${sectionIdx}`;
-        // Carátula ahora viene vacía de texto automático
         sep.innerHTML = `
             <img id="${sid}" class="separator-img">
             <div class="separator-content" id="box-${sid}" contenteditable="true">
-                <span id="guide-${sid}">Haz clic para escribir título o carga imagen...</span>
+                <span id="guide-${sid}">Haz clic para escribir título o carga imagen de portada...</span>
             </div>
             <div class="image-overlay">
                 <button class="overlay-btn" onclick="loadImg('${sid}', true)">Link URL</button>
