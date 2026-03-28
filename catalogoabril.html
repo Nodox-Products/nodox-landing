@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Nodox Master - Excel Visual Edition</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    <style>
+        :root { --nodox: #000; --accent: #d32f2f; --ws-green: #25D366; --gray: #f8f9fa; --overlay: rgba(0,0,0,0.8); }
+        body { font-family: 'Helvetica', Arial, sans-serif; margin: 0; background: #e9ecef; color: #333; }
+        
+        .no-print { background: white; padding: 20px; border-bottom: 5px solid var(--nodox); text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        .btn { padding: 12px 25px; border-radius: 25px; border: none; font-weight: bold; cursor: pointer; text-transform: uppercase; margin: 5px; font-size: 13px; }
+        .btn-upload { background: var(--nodox); color: white; }
+        .btn-download { background: #217346; color: white; }
+
+        #catalog-container { width: 210mm; margin: 20px auto; }
+        .pdf-page { width: 210mm; height: 296.5mm; padding: 12mm; box-sizing: border-box; background: white; display: flex; flex-direction: column; position: relative; margin-bottom: 20px; overflow: hidden; }
+        
+        .separator-page { padding: 0 !important; justify-content: center; align-items: center; background: #111; }
+        .separator-img { position: absolute; width: 100%; height: 100%; object-fit: cover; z-index: 1; opacity: 0.7; }
+        .separator-content { position: relative; z-index: 2; color: white; text-align: center; background: rgba(0,0,0,0.6); padding: 30px; border-radius: 15px; width: 80%; border: 1px solid rgba(255,255,255,0.2); }
+
+        .page-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 15px; }
+        .nodox-logo-container { height: 50px; }
+        .nodox-logo-container img { height: 100%; image-rendering: -webkit-optimize-contrast; }
+
+        .product-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(4, 1fr); gap: 15px; flex-grow: 1; }
+        .card { border: 1px solid #ddd; border-radius: 6px; display: flex; flex-direction: column; background: #fff; max-height: 60mm; padding: 10px; box-sizing: border-box; position: relative; }
+        .card-image-container { width: 100%; height: 65px; background: var(--gray); margin-bottom: 8px; display: flex; align-items: center; justify-content: center; border: 1px solid #eee; position: relative; overflow: hidden; }
+        .card-image-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        
+        .image-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--overlay); color: white; display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.2s; z-index: 10; font-size: 10px; gap: 5px; }
+        .card-image-container:hover .image-overlay, .separator-page:hover .image-overlay { opacity: 1; }
+
+        .card-title { font-size: 11px; font-weight: bold; margin-bottom: 3px; text-transform: uppercase; line-height: 1.2; height: 2.4em; overflow: hidden; color: #000; }
+        .card-sku { font-size: 10px; color: #444; font-weight: bold; }
+        .attr-label { font-size: 9px; font-weight: bold; color: var(--accent); text-decoration: underline; margin-top: 2px; }
+        .card-specs { font-size: 9.5px; color: #555; line-height: 1.2; list-style: none; padding: 0; margin-top: 5px; border-top: 1px solid #eee; padding-top: 5px; }
+        
+        [contenteditable="true"]:focus { outline: 2px solid #ffc107; background: #fffde7; border-radius: 2px; }
+        .page-footer { border-top: 1px solid #eee; padding-top: 8px; margin-top: auto; display: flex; justify-content: space-between; align-items: center; font-size: 9px; color: #999; }
+        .ws-link { background: var(--ws-green); color: white; padding: 5px 12px; border-radius: 20px; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="no-print">
+    <h1 style="margin:0">NODOX MASTER CATALOG (EXCEL)</h1>
+    <input type="file" id="csv-input" accept=".csv" style="display:none" onchange="handleCSV(this)">
+    <button class="btn btn-upload" onclick="document.getElementById('csv-input').click()">📁 Cargar / Agregar CSV</button>
+    <button id="download-btn" class="btn btn-download" onclick="exportToExcel()" style="display:none;">📥 Descargar Catálogo Excel</button>
+</div>
+
+<div id="catalog-container"></div>
+
+<script>
+    const WHATSAPP = "+502 4591 7700";
+    const LOGO = "logotipoNodox.png";
+    let sectionIdx = 0;
+    let masterData = []; // Guardamos los datos para el Excel
+
+    function handleCSV(input) {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = e => {
+            const clean = e.target.result.split(/\r?\n/).slice(2).join('\n');
+            Papa.parse(clean, {
+                header: true, delimiter: "\t", skipEmptyLines: true,
+                complete: res => {
+                    if(res.data.length) {
+                        const sectionName = file.name.replace('.csv','').toUpperCase();
+                        masterData.push({ section: sectionName, items: res.data });
+                        addSection(res.data, file.name);
+                        document.getElementById('download-btn').style.display = 'inline-block';
+                    }
+                }
+            });
+        };
+        reader.readAsText(file);
+        input.value = "";
+    }
+
+    function addSection(data, name) {
+        const container = document.getElementById('catalog-container');
+        sectionIdx++;
+        const sep = document.createElement('div');
+        sep.className = 'pdf-page separator-page';
+        const sid = `s-${sectionIdx}`;
+        sep.innerHTML = `<img id="${sid}" class="separator-img"><div class="separator-content"><h1 contenteditable="true">${name.replace('.csv','').toUpperCase()}</h1></div>
+            <div class="image-overlay" data-html2canvas-ignore="true"><button onclick="loadImg('${sid}')">URL</button><button onclick="document.getElementById('f-${sid}').click()">FILE</button></div><input type="file" id="f-${sid}" hidden onchange="upImg(this,'${sid}',true)">`;
+        container.appendChild(sep);
+
+        const per = 8;
+        for (let i = 0; i < Math.ceil(data.length / per); i++) {
+            const page = document.createElement('div');
+            page.className = 'pdf-page';
+            page.innerHTML = `<div class="page-header"><div class="nodox-logo-container"><img src="${LOGO}"></div><div style="font-size:10px;">SECCIÓN ${sectionIdx}</div></div>`;
+            const grid = document.createElement('div');
+            grid.className = 'product-grid';
+            data.slice(i * per, (i + 1) * per).forEach((p, idx) => {
+                const id = `img-${sectionIdx}-${i}-${idx}`;
+                grid.innerHTML += `<div class="card"><div class="card-image-container"><img id="${id}" style="display:none"><span style="font-size:8px;color:#ccc">Imagen Producto</span><div class="image-overlay" data-html2canvas-ignore="true"><button onclick="loadImg('${id}')">URL</button><button onclick="document.getElementById('f-${id}').click()">FILE</button><input type="file" id="f-${id}" hidden onchange="upImg(this,'${id}',false)"></div></div>
+                    <div class="card-title" contenteditable="true">${(p.Nombre||'').split(' - ')[0]}</div><div class="card-sku" contenteditable="true">SKU: ${p.SKU||'--'}</div><div class="attr-label">Atributos:</div><div class="card-specs" contenteditable="true">${(p.Atributos||'').split('-').join(' • ')}</div></div>`;
+            });
+            page.appendChild(grid);
+            page.innerHTML += `<div class="page-footer">© NODOX 2026 | +502 4591 7700<a href="https://wa.me/${WHATSAPP}" class="ws-link" data-html2canvas-ignore="true">📱 WhatsApp</a></div>`;
+            container.appendChild(page);
+        }
+    }
+
+    function loadImg(id) {
+        const url = prompt("Link de la imagen:");
+        if(url) { const img = document.getElementById(id); img.src = url; img.style.display="block"; }
+    }
+
+    function upImg(input, id, full) {
+        if (input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const max = full ? 1000 : 350;
+                    const scale = max / img.width;
+                    canvas.width = max; canvas.height = img.height * scale;
+                    canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                    const res = document.getElementById(id);
+                    res.src = canvas.toDataURL('image/jpeg', 0.6);
+                    res.style.display = "block";
+                };
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    // --- MOTOR DE EXCEL VISUAL ---
+    async function exportToExcel() {
+        const workbook = new ExcelJS.Workbook();
+        const sheet = workbook.addWorksheet('Catalogo Nodox');
+
+        // Configuración de cuadrícula Excel
+        sheet.columns = [
+            { width: 35 }, { width: 45 }, // Bloque Izquierdo
+            { width: 5 },                  // Espaciador
+            { width: 35 }, { width: 45 }  // Bloque Derecho
+        ];
+
+        let currentRow = 1;
+
+        for (const section of masterData) {
+            // Carátula de Sección en Excel
+            sheet.mergeCells(`A${currentRow}:E${currentRow + 1}`);
+            const titleCell = sheet.getCell(`A${currentRow}`);
+            titleCell.value = section.section;
+            titleCell.font = { name: 'Arial Black', size: 16, color: { argb: 'FFFFFF' } };
+            titleCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '000000' } };
+            titleCell.alignment = { vertical: 'middle', horizontal: 'center' };
+            
+            currentRow += 3;
+
+            // Productos de 2 en 2
+            for (let i = 0; i < section.items.length; i += 2) {
+                const p1 = section.items[i];
+                const p2 = section.items[i+1];
+
+                // Dibujar Tarjeta 1
+                drawExcelCard(sheet, currentRow, 'A', 'B', p1);
+                // Dibujar Tarjeta 2
+                if (p2) drawExcelCard(sheet, currentRow, 'D', 'E', p2);
+
+                currentRow += 4;
+            }
+            currentRow += 2; // Espacio entre secciones
+        }
+
+        const buffer = await workbook.xlsx.writeBuffer();
+        saveAs(new Blob([buffer]), `Catalogo_Nodox_${new Date().getTime()}.xlsx`);
+    }
+
+    function drawExcelCard(sheet, row, col1, col2, p) {
+        // Estilo de Nombre y SKU
+        sheet.getRow(row).height = 40;
+        const nameCell = sheet.getCell(`${col1}${row}`);
+        nameCell.value = (p.Nombre || '').split(' - ')[0].toUpperCase();
+        nameCell.font = { bold: true, size: 11 };
+        nameCell.alignment = { wrapText: true, vertical: 'middle' };
+
+        const skuCell = sheet.getCell(`${col2}${row}`);
+        skuCell.value = `SKU: ${p.SKU || '--'}`;
+        skuCell.font = { italic: true, size: 10, color: { argb: '666666' } };
+        skuCell.alignment = { horizontal: 'right', vertical: 'middle' };
+
+        // Atributos (Celda combinada debajo)
+        sheet.mergeCells(`${col1}${row+1}:${col2}${row+2}`);
+        sheet.getRow(row + 1).height = 30;
+        sheet.getRow(row + 2).height = 30;
+        
+        const attrCell = sheet.getCell(`${col1}${row+1}`);
+        attrCell.value = `ATRIBUTOS:\n${(p.Atributos || '').replace(/-/g, ' • ')}`;
+        attrCell.font = { size: 9 };
+        attrCell.alignment = { wrapText: true, vertical: 'top' };
+        attrCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'F2F2F2' } };
+
+        // Bordes de la "Tarjeta"
+        const borderStyle = { style: 'thin' };
+        [`${col1}${row}`, `${col2}${row}`, `${col1}${row+1}`, `${col2}${row+1}`, `${col1}${row+2}`, `${col2}${row+2}`].forEach(c => {
+            sheet.getCell(c).border = { top: borderStyle, left: borderStyle, bottom: borderStyle, right: borderStyle };
+        });
+    }
+</script>
+</body>
+</html>
