@@ -40,7 +40,7 @@
       text-align: center;
     }
 
-    /* Cards Estilo Imagen Adjunta */
+    /* Cards Estilo Moderno */
     .card-modern {
       background: var(--white);
       border-radius: var(--radius-lg);
@@ -102,6 +102,7 @@
       color: var(--nodox-blue);
     }
 
+    /* Botones */
     .btn-nodox {
       background-color: var(--nodox-yellow);
       color: var(--nodox-blue);
@@ -150,7 +151,7 @@
       border-top: 1px solid #eee;
     }
 
-    /* Estilos para el Recomendador de Equipos */
+    /* Caja de recomendación del Asesor */
     .recommendation-box {
       border-left: 5px solid var(--nodox-yellow);
       background-color: #fdfdfd;
@@ -159,6 +160,7 @@
 </head>
 <body>
 
+  <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
     <div class="container">
       <a class="navbar-brand" href="#"><img src="nodoxblanco.png" alt="Nodox" height="40"></a>
@@ -168,6 +170,7 @@
     </div>
   </nav>
 
+  <!-- HERO -->
   <section class="hero-section">
     <div class="container">
       <h1 class="display-4 fw-bold mb-3">Soluciones Tecnológicas Corporativas</h1>
@@ -176,6 +179,7 @@
     </div>
   </section>
 
+  <!-- BENEFICIOS -->
   <section class="py-5">
     <div class="container">
       <div class="text-center mb-5">
@@ -208,14 +212,12 @@
     </div>
   </section>
 
-  <!-- ========================================== -->
-  <!-- NUEVA SECCIÓN: ASESOR INTELIGENTE NODOX -->
-  <!-- ========================================== -->
+  <!-- SECCIÓN: ASESOR INTELIGENTE AVANZADO -->
   <section class="py-5 bg-light border-top border-bottom" id="asesor">
     <div class="container">
       <div class="text-center mb-5">
-        <h2 class="fw-bold">Asesor Inteligente Nodox</h2>
-        <p class="text-muted">Encuentra la computadora ideal para tu empresa en pocos pasos</p>
+        <h2 class="fw-bold">Asesor Inteligente Avanzado Nodox</h2>
+        <p class="text-muted">Configura la solución tecnológica exacta para tu empresa en 1 minuto</p>
       </div>
       
       <div class="row justify-content-center">
@@ -223,46 +225,77 @@
           <div class="card-modern">
             <form id="formAsesor">
               
-              <!-- Pregunta 1 -->
+              <!-- Pregunta 1: Uso -->
               <div class="mb-4">
-                <label class="form-label fw-bold"><i class="bi bi-laptop me-2 text-warning"></i>1. ¿Para qué uso principal requiere la computadora?</label>
+                <label class="form-label fw-bold"><i class="bi bi-laptop me-2 text-warning"></i>1. ¿Para qué uso principal requiere el equipo?</label>
                 <select class="form-select form-select-lg" id="usoPc" required>
                   <option value="" selected disabled>Seleccione una opción...</option>
                   <option value="oficina">Trabajo de Oficina / Administrativo (Excel, Correo, Navegación)</option>
-                  <option value="diseno">Diseño Gráfico, Arquitectura, Ingeniería o Programación Avanzada</option>
-                  <option value="movilidad">Alta Movilidad / Ejecutivos (Liviana, batería de larga duración, viajes)</option>
+                  <option value="diseno">Diseño Gráfico, Arquitectura, Ingeniería o Programación</option>
+                  <option value="movilidad">Alta Movilidad / Ejecutivos (Viajes, batería de larga duración)</option>
                 </select>
               </div>
 
-              <!-- Pregunta 2 -->
+              <!-- Pregunta 2: Formato -->
               <div class="mb-4">
-                <label class="form-label fw-bold"><i class="bi bi-tags me-2 text-warning"></i>2. ¿Tiene alguna preferencia de marca?</label>
+                <label class="form-label fw-bold"><i class="bi bi-display me-2 text-warning"></i>2. ¿Qué tipo de formato prefiere?</label>
+                <select class="form-select form-select-lg" id="formatoPc" required>
+                  <option value="" selected disabled>Seleccione el formato...</option>
+                  <option value="laptop">Computadora Portátil (Laptop)</option>
+                  <option value="desktop">Computadora de Escritorio (Torre / CPU fijo)</option>
+                  <option value="allinone">All-in-One (Todo en Uno - Pantalla integrada)</option>
+                </select>
+              </div>
+
+              <!-- Pregunta 3: Marca -->
+              <div class="mb-4">
+                <label class="form-label fw-bold"><i class="bi bi-tags me-2 text-warning"></i>3. ¿Tiene alguna preferencia de marca?</label>
                 <select class="form-select form-select-lg" id="marcaPc" required>
                   <option value="" selected disabled>Seleccione una marca...</option>
                   <option value="hp">HP</option>
                   <option value="dell">Dell</option>
                   <option value="lenovo">Lenovo</option>
-                  <option value="microsoft">Microsoft Surface</option>
+                  <option value="microsoft">Microsoft Surface (Solo laptops/2-en-1)</option>
+                </select>
+              </div>
+
+              <!-- Pregunta 4: Presupuesto -->
+              <div class="mb-4">
+                <label class="form-label fw-bold"><i class="bi bi-cash-coin me-2 text-warning"></i>4. Presupuesto estimado por unidad</label>
+                <select class="form-select form-select-lg" id="presupuestoPc" required>
+                  <option value="" selected disabled>Seleccione rango estimado...</option>
+                  <option value="economico">Gama Corporativa de Entrada (Eficiencia al mejor precio)</option>
+                  <option value="profesional">Gama Profesional Estándar (Balance óptimo rendimiento/precio)</option>
+                  <option value="premium">Gama Alta / Corporativa Premium (Máxima potencia y materiales)</option>
                 </select>
               </div>
 
               <div class="text-center mt-4">
-                <button type="button" class="btn btn-nodox btn-lg w-100" onclick="buscarComputadora()">
-                  <i class="bi bi-cpu-fill me-2"></i> VER RECOMENDACIÓN NODOX
+                <button type="button" class="btn btn-nodox btn-lg w-100" onclick="buscarComputadoraAvanzada()">
+                  <i class="bi bi-cpu-fill me-2"></i> GENERAR CONFIGURACIÓN SUGERIDA
                 </button>
               </div>
             </form>
 
             <!-- Contenedor del Resultado -->
             <div id="resultadoAsesor" class="mt-5 p-4 recommendation-box d-none">
-              <h4 class="fw-bold text-success mb-2"><i class="bi bi-check-circle-fill me-2"></i>¡Equipo Nodox Ideal Sugerido!</h4>
-              <p class="lead mb-3" id="nombreEquipo">Modelo de Computadora</p>
-              <p class="text-muted" id="descripcionEquipo">Características sugeridas.</p>
+              <h4 class="fw-bold text-success mb-2"><i class="bi bi-check-circle-fill me-2"></i>¡Propuesta de Configuración Nodox!</h4>
+              <p class="lead mb-1" id="nombreEquipo">Modelo de Computadora</p>
+              <span class="badge bg-dark mb-3" id="badgeSegmento">Segmento</span>
+              
+              <p class="text-muted mb-4" id="descripcionEquipo">Características sugeridas.</p>
+              
+              <!-- Bloque de Venta Cruzada (Cross-selling) -->
+              <div class="p-3 bg-light rounded-3 mb-4 border-start border-3 border-info">
+                <h6 class="fw-bold text-info mb-2"><i class="bi bi-plus-circle-fill me-2"></i>Solución Complementaria Sugerida Nodox:</h6>
+                <p class="small mb-0 text-muted" id="complementoSugerido">Accesorios o licencias que hacen match con este equipo.</p>
+              </div>
+
               <hr>
               <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
-                <span class="small text-muted">*Sujeto a disponibilidad. Podemos cotizar características personalizadas.</span>
+                <span class="small text-muted">*Sujeto a inventario. Contamos con entrega en 24 horas para Ciudad de Guatemala.</span>
                 <a id="btnCotizarEspecifico" href="#" target="_blank" class="btn btn-whatsapp btn-sm">
-                  <i class="bi bi-whatsapp me-1"></i> Cotizar este modelo
+                  <i class="bi bi-whatsapp me-1"></i> Solicitar Cotización Formal
                 </a>
               </div>
             </div>
@@ -273,6 +306,7 @@
     </div>
   </section>
 
+  <!-- CARRUSEL DE MARCAS -->
   <section class="brands-section border-top border-bottom">
     <div class="container mb-4 text-center">
       <h3 class="fw-bold">Marcas que distribuimos</h3>
@@ -295,6 +329,7 @@
     </div>
   </section>
 
+  <!-- TESTIMONIALES -->
   <section class="py-5 bg-light">
     <div class="container">
       <div class="text-center mb-5">
@@ -305,7 +340,7 @@
         <div class="col-md-4">
           <div class="card-modern">
             <i class="bi bi-quote fs-1 text-warning opacity-50"></i>
-            <p class="fst-italic text-muted">"Hemos equipado toda nuestra oficina con hardware de Nodox. Su servicio de entrega en 24 horas nos ha salvado en múltiples ocasiones."</p>
+            <p class="fst-italic text-muted">"Hemos équipé toda nuestra oficina con hardware de Nodox. Su servicio de entrega en 24 horas nos ha salvado en múltiples ocasiones."</p>
             <span class="testimonial-author">Carlos Méndez</span>
             <span class="testimonial-role">Director de TI, Empresa Financiera</span>
           </div>
@@ -330,6 +365,7 @@
     </div>
   </section>
 
+  <!-- FAQ -->
   <section class="py-5">
     <div class="container">
       <h2 class="text-center fw-bold mb-5">Preguntas Frecuentes</h2>
@@ -374,6 +410,7 @@
     </div>
   </section>
 
+  <!-- CONTACTO -->
   <section class="contact-footer-section" id="contacto">
     <div class="container text-center">
       <h2 class="fw-bold mb-4">¿Necesitas una cotización personalizada?</h2>
@@ -389,90 +426,106 @@
     </div>
   </section>
 
+  <!-- FOOTER -->
   <footer class="py-4 bg-dark text-white text-center">
     <div class="container">
       <img src="nodoxblanco.png" alt="Nodox" height="30" class="mb-3 opacity-75">
       <p class="small opacity-50 mb-0">© 2026 Nodox Guatemala | Todos los derechos reservados.</p>
     </div>
-  </footer >
+  </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- ========================================== -->
-  <!-- LÓGICA JAVASCRIPT DEL ASESOR DE EQUIPOS -->
-  <!-- ========================================== -->
+  <!-- LOGICA JAVASCRIPT DEL ASESOR DE EQUIPOS -->
   <script>
-    function buscarComputadora() {
+    function buscarComputadoraAvanzada() {
       const uso = document.getElementById('usoPc').value;
-      const marca = document.getElementById('marcaPc').value;
+      const formato = document.getElementById('formatoPc').value;
+      const mt = document.getElementById('marcaPc').value; 
+      const presupuesto = document.getElementById('presupuestoPc').value;
       
-      if(!uso || !marca) {
-        alert("Por favor, selecciona ambas opciones para poder asesorarte.");
+      if(!uso || !formato || !mt || !presupuesto) {
+        alert("Por favor, completa todas las preguntas del asesor.");
         return;
       }
 
-      let modeloSugerido = "";
-      let descripcionSugerida = "";
+      let modelo = "";
+      let desc = "";
+      let complemento = "";
+      let segmento = "";
 
-      // Matriz de decisiones basada en marcas corporativas de Nodox
-      if (marca === "hp") {
-        if (uso === "oficina") {
-          modeloSugerido = "HP ProBook 450 G10";
-          descripcionSugerida = "Ideal para multitarea corporativa, procesador Intel Core i5, 16GB RAM y alta durabilidad para el día a día en oficina.";
-        } else if (uso === "diseno") {
-          modeloSugerido = "HP ZBook Power G10 / Z2 Mini";
-          descripcionSugerida = "Estación de trabajo (Workstation) de alto rendimiento con gráficos dedicados NVIDIA, ideal para CAD, renderizado y software pesado.";
-        } else {
-          modeloSugerido = "HP EliteBook 840 G10 ultra-liviana";
-          descripcionSugerida = "Diseño premium ultradelgado de aluminio, chasis ligero, pantalla de alta claridad y batería de extensa duración para viajes.";
-        }
-      } 
-      else if (marca === "dell") {
-        if (uso === "oficina") {
-          modeloSugerido = "Dell Latitude 3540";
-          descripcionSugerida = "El estándar de oro para confiabilidad en la empresa. Configurada con almacenamiento SSD rápido y herramientas esenciales de gestión.";
-        } else if (uso === "diseno") {
-          modeloSugerido = "Dell Precision 3581 Workstation";
-          descripcionSugerida = "Poder bruto certificado por ISV. Rendimiento superior para ingenieros y diseñadores gráficos que no aceptan ralentizaciones.";
-        } else {
-          modeloSugerido = "Dell Latitude 7440 Ultralight";
-          descripcionSugerida = "Máxima movilidad ejecutiva con materiales de magnesio ultraligeros, conectividad inteligente y seguridad avanzada.";
-        }
-      } 
-      else if (marca === "lenovo") {
-        if (uso === "oficina") {
-          modeloSugerido = "Lenovo ThinkPad E14 / L14";
-          descripcionSugerida = "Famosa por su teclado ergonómico y legendaria resistencia corporativa. Procesadores de última generación listos para la oficina.";
-        } else if (uso === "diseno") {
-          modeloSugerido = "Lenovo ThinkPad P16s Workstation";
-          descripcionSugerida = "Estación de trabajo portátil y delgada con potencia gráfica optimizada para modelado 3D, desarrollo de software y edición de video.";
-        } else {
-          modeloSugerido = "Lenovo ThinkPad X1 Carbon Gen 11";
-          descripcionSugerida = "La laptop de ejecutivos por excelencia. Fabricada en fibra de carbono, increíblemente ligera y sofisticada para viajes de negocios.";
-        }
-      } 
-      else if (marca === "microsoft") {
-        if (uso === "oficina") {
-          modeloSugerido = "Microsoft Surface Laptop 5";
-          descripcionSugerida = "Estilo elegante con pantalla táctil PixelSense, ideal para tareas administrativas fluidas con un ecosistema Windows 11 nativo y limpio.";
-        } else if (uso === "diseno") {
-          modeloSugerido = "Microsoft Surface Laptop Studio 2";
-          descripcionSugerida = "Pantalla dinámica flexible de 120Hz con tarjeta gráfica dedicada, la mejor opción versátil para creativos, arquitectos y programadores.";
-        } else {
-          modeloSugerido = "Microsoft Surface Pro 9 / Pro 10 (2-en-1)";
-          descripcionSugerida = "El balance definitivo entre tableta corporativa y laptop ultraportátil. Perfecta para presentaciones directas con clientes y movilidad extrema.";
-        }
+      // Control preventivo para Microsoft Surface (formato limitado a portabilidad)
+      let marca = mt;
+      if(marca === 'microsoft' && (formato === 'desktop' || formato === 'allinone')) {
+        alert("Nota: Microsoft Surface diseña principalmente portátiles y tabletas de alta gama. Para su formato fijo, le mostraremos una alternativa equivalente líder en Dell.");
+        marca = 'dell';
       }
 
-      // Desplegar la respuesta en la interfaz
-      document.getElementById('nombreEquipo').innerHTML = `<strong>${modeloSugerido}</strong>`;
-      document.getElementById('descripcionEquipo').innerText = descripcionSugerida;
+      // 1. ÁRBOL DE DECISIÓN CORPORATIVA
+      if (formato === 'laptop') {
+        segmento = "Computadora Portátil Corporativa";
+        if (marca === 'hp') {
+          if (presupuesto === 'economico') { modelo = "HP 250 G10"; desc = "Procesador Intel Core i3/i5 de entrada, 8GB RAM, SSD rápido. Ideal para flotas operativas con excelente balance costo-beneficio."; }
+          else if (presupuesto === 'profesional') { modelo = "HP ProBook 450 G10"; desc = "Procesador Intel Core i5, 16GB RAM, suite de seguridad HP Wolf Security. El estándar corporativo confiable."; }
+          else { modelo = uso === 'diseno' ? "HP ZBook Power G10 Workstation" : "HP EliteBook 840 G10"; desc = "Gama Alta. Elegancia en chasis de aluminio, procesador Core i7 de alto rendimiento y pantalla ultranítida."; }
+        } 
+        else if (marca === 'dell') {
+          if (presupuesto === 'economico') { modelo = "Dell Vostro 3430"; desc = "Rendimiento ágil para las tareas del día a día en oficina. Conectividad empresarial robusta."; }
+          else if (presupuesto === 'profesional') { modelo = "Dell Latitude 3540 / 5440"; desc = "Excelente capacidad de administración para TI, batería extendida, ideal para esquemas de trabajo híbridos."; }
+          else { modelo = uso === 'diseno' ? "Dell Precision 3581 Workstation" : "Dell Latitude 7440 Ultralight"; desc = "Gama Alta Premium. Gráficos certificados para ingeniería o aleación de magnesio ligera para altos ejecutivos."; }
+        }
+        else if (marca === 'lenovo') {
+          if (presupuesto === 'economico') { modelo = "Lenovo ThinkPad E14 Gen 5"; desc = "La puerta de entrada a la legendaria resistencia ThinkPad. Teclado antiderrames de alta comodidad."; }
+          else if (presupuesto === 'profesional') { modelo = "Lenovo ThinkPad L14 / L15"; desc = "Múltiples puertos, durabilidad bajo pruebas militares (MIL-SPEC). El balance perfecto para operaciones robustas."; }
+          else { modelo = uso === 'diseno' ? "Lenovo ThinkPad P16s" : "Lenovo ThinkPad X1 Carbon Gen 11"; desc = "Tope de línea. Construcción en fibra de carbono ultraligera o estaciones portátiles dedicadas de diseño."; }
+        }
+        else if (marca === 'microsoft') {
+          segmento = "Ecosistema Premium Microsoft Surface";
+          if (presupuesto === 'economico') { modelo = "Microsoft Surface Laptop Go 3"; desc = "Ultra compacta, pantalla táctil. Destaca la elegancia y ligereza para asesores corporativos en campo."; }
+          else if (presupuesto === 'profesional') { modelo = "Microsoft Surface Laptop 5"; desc = "Pantalla táctil PixelSense de alta gama. Fluidez nativa total optimizada con Windows 11 Pro."; }
+          else { modelo = uso === 'diseno' ? "Microsoft Surface Laptop Studio 2" : "Microsoft Surface Pro 10 (2-en-1)"; desc = "Lo más avanzado de Microsoft. Formato flexible para ilustradores/ingenieros o versatilidad convertible para firmas en pantalla."; }
+        }
+      } 
+      else if (formato === 'desktop') {
+        segmento = "Estación de Escritorio Fija";
+        if (marca === 'hp') {
+          if (presupuesto === 'premium' && uso === 'diseno') { modelo = "Workstation HP Z2 Tower G9"; desc = "Poder bruto altamente expandible. Certificación ISV y gráficos dedicados NVIDIA Quadro para renderizado."; }
+          else { modelo = "HP ProTower 400 G9"; desc = "Formato torre seguro y eficiente con procesador Intel Core i5. Ideal para puestos estables de larga duración."; }
+        } else if (marca === 'dell') {
+          if (presupuesto === 'premium' && uso === 'diseno') { modelo = "Workstation Dell Precision 3660"; desc = "Rendimiento crítico ininterrumpido. Memoria ECC con corrección de errores, ideal para análisis masivo de datos."; }
+          else { modelo = "Dell OptiPlex Small Form Factor (SFF)"; desc = "Chasis ultra reducido que optimiza el espacio de trabajo conservando la potencia de un procesador de torre."; }
+        } else {
+          modelo = "Lenovo ThinkCentre M70s SFF";
+          desc = "Capa de seguridad hardware ThinkShield integrada. Diseño modular eficiente de alta duración para empresas.";
+        }
+      } 
+      else if (formato === 'allinone') {
+        segmento = "Todo en Uno (All-in-One)";
+        if (marca === 'hp') { modelo = "HP ProOne 440 G9 AIO"; desc = "Diseño impecable y limpio para recepciones, clínicas o agencias. Pantalla Full HD de 23.8\" con cámara web retráctil."; }
+        else if (marca === 'dell') { modelo = "Dell OptiPlex All-in-One"; desc = "Pantalla premium de bordes mínimos con cables ocultos. Mantiene el minimalismo y el orden corporativo."; }
+        else { modelo = "Lenovo ThinkCentre Neo 30a"; desc = "Audio inteligente para videoconferencias, pantalla con filtro antirreflejo, perfecta para atención al público en ventanilla."; }
+      }
+
+      // 2. VENTA CRUZADA (CROSS-SELLING) INTELIGENTE
+      if (uso === 'oficina') {
+        complemento = "Para esta configuración operativa, sugerimos integrar licenciamiento original Microsoft 365 Business y auriculares profesionales Plantronics (Poly) para llamadas corporativas nítidas.";
+      } else if (uso === 'diseno') {
+        complemento = "Para aprovechar al máximo este poder, te sugerimos complementarlo con un Monitor Profesional HP/Dell de alta gama y switches Cisco para asegurar transferencias fluidas de datos.";
+      } else {
+        complemento = "Al ser una solución de alta movilidad, recomendamos complementarla con un docking station USB-C multimarca para tu escritorio y parlantes JBL portátiles para tus juntas de negocios.";
+      }
+
+      // 3. ACTUALIZACIÓN DE LA INTERFAZ
+      document.getElementById('nombreEquipo').innerHTML = `<strong>${modelo}</strong>`;
+      document.getElementById('badgeSegmento').innerText = segmento;
+      document.getElementById('descripcionEquipo').innerText = desc;
+      document.getElementById('complementoSugerido').innerText = complemento;
       
-      // Personalizar el link de WhatsApp con el modelo recomendado
-      const mensajeWa = encodeURIComponent(`Hola Nodox Guatemala, utilicé su recomendador web y me interesa una cotización corporativa para el equipo: ${modeloSugerido}.`);
+      // Enlace personalizado para WhatsApp
+      const mensajeWa = encodeURIComponent(`Hola Nodox Guatemala, utilicé su cotizador automatizado para un perfil '${uso}' en formato '${formato}' con presupuesto '${presupuesto}'. El sistema recomendó la opción: ${modelo}. ¿Me podrían brindar detalles de precios de lista corporativos?`);
       document.getElementById('btnCotizarEspecifico').href = `https://wa.me/50245917700?text=${mensajeWa}`;
 
-      // Mostrar el contenedor aplicando animaciones suaves de Bootstrap
+      // Despliegue con scroll suave
       const contenedor = document.getElementById('resultadoAsesor');
       contenedor.classList.remove('d-none');
       contenedor.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
