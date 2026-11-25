@@ -1,285 +1,520 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cotización - Nodox Products</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            margin: 40px;
-            color: #0B1A33;
-            background: linear-gradient(135deg, #e8ebf2, #f7f9fc);
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 25px;
-            border-bottom: 3px solid #c7ccd6;
-        }
-        .logo img{
-            width: 230px;
-            filter: drop-shadow(0px 3px 6px rgba(0,0,0,0.15));
-        }
-        h1 {
-            text-align: center;
-            margin-top: 50px;
-            color: #0B1A33;
-            font-size: 36px;
-            letter-spacing: 4px;
-            font-weight: 700;
-            text-shadow: 0px 1px 3px rgba(0,0,0,0.15);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 40px;
-            background: #ffffff;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
-            border-radius: 12px;
-            overflow: hidden;
-            table-layout: fixed; /* Ayuda a controlar el ancho de las celdas */
-        }
-        th {
-            background: #0B1A33;
-            color: white;
-            padding: 16px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        td {
-            padding: 12px 16px;
-            border-bottom: 1px solid #e6e9ef;
-            font-size: 15px;
-            vertical-align: top;
-        }
-        input, textarea {
-            border: 1px solid #ddd;
-            padding: 8px;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-family: inherit;
-            font-size: inherit;
-        }
-        /* Estilo para que la descripción sea expandible */
-        textarea.description {
-            width: 100%;
-            resize: none;
-            overflow: hidden;
-            min-height: 38px;
-            display: block;
-        }
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: #0B1A33;
-            box-shadow: 0 0 5px rgba(11, 26, 51, 0.3);
-        }
-        .button-row {
-            display: flex;
-            justify-content: flex-start;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .row-button {
-            width: 40px;
-            height: 40px;
-            border: none;
-            border-radius: 50%;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        .add-button { background-color: #0B1A33; color: white; }
-        .remove-button { background-color: #d32f2f; color: white; }
-        .print-button {
-            background-color: #2e7d32;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            border: none;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-left: auto;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        .totals {
-            margin-top: 30px;
-            font-size: 20px;
-            text-align: right;
-            font-weight: 700;
-            color: #0B1A33;
-        }
-        .footer {
-            margin-top: 70px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .accept-box {
-            width: 45%;
-            border-top: 3px solid #0B1A33;
-            padding-top: 15px;
-            text-align: center;
-            font-size: 16px;
-            font-weight: 600;
-        }
-        .delete-cell { width: 50px; text-align: center; }
-        .delete-btn {
-            background: none; border: none; color: #d32f2f;
-            font-size: 20px; font-weight: bold; cursor: pointer;
-            width: 30px; height: 30px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cotización - Nodox Products</title>
+<style>
+  :root{
+    --navy:#0B1A33; --ink:#1d2433; --muted:#6b7385; --line:#e3e6ec;
+    --soft:#f4f6f9; --accent:#2f5bd3; --empty:#f3f6fd;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    color:var(--ink); background:#e6e9ef; font-size:13.5px; line-height:1.45;
+  }
 
-        /* Print-specific styles */
-        @media print {
-            body { margin: 0; padding: 20px; background: white !important; color: black !important; }
-            .no-print { display: none !important; }
-            table { box-shadow: none !important; border: 1px solid #ddd !important; }
-            th { background: #0B1A33 !important; color: white !important; -webkit-print-color-adjust: exact; }
-            
-            textarea.description, input {
-                border: none !important;
-                padding: 0 !important;
-                background: transparent !important;
-                box-shadow: none !important;
-                width: 100% !important;
-                resize: none !important;
-            }
-            /* Asegura que el textarea muestre todo el contenido al imprimir */
-            textarea.description {
-                height: auto !important;
-            }
-        }
-    </style>
+  /* ---------- Barra de herramientas (solo pantalla) ---------- */
+  .toolbar{
+    position:sticky; top:0; z-index:10; background:var(--navy); color:#fff;
+    display:flex; gap:8px; align-items:center; padding:10px 24px; flex-wrap:wrap;
+  }
+  .toolbar .title{font-weight:600; letter-spacing:.5px; margin-right:auto}
+  .btn{
+    border:1px solid rgba(255,255,255,.3); background:transparent; color:#fff;
+    padding:7px 14px; border-radius:6px; font:inherit; font-weight:600; cursor:pointer;
+  }
+  .btn:hover{background:rgba(255,255,255,.1)}
+  .btn.primary{background:#fff; color:var(--navy); border-color:#fff}
+  .btn.primary:hover{background:#e8ecf5}
+
+  /* ---------- Hoja ---------- */
+  .sheet{
+    width:216mm; max-width:100%; min-height:279mm; margin:24px auto; background:#fff;
+    padding:15mm 16mm 12mm; box-shadow:0 6px 30px rgba(11,26,51,.12);
+    display:flex; flex-direction:column;
+  }
+
+  /* ---------- Campos editables (se ven como texto) ---------- */
+  .f{
+    border:none; border-bottom:1px dashed transparent; background:transparent;
+    font:inherit; color:inherit; padding:2px 4px; width:100%; border-radius:3px;
+  }
+  .f:hover{border-bottom-color:#c4cad6}
+  .f:focus{outline:none; border-bottom-color:var(--accent); background:#f6f8fe}
+  .f:placeholder-shown{background:var(--empty)}
+  .f::placeholder{color:#9aa1b1}
+  textarea.f{resize:none; overflow:hidden; display:block}
+  input[type=number]{-moz-appearance:textfield}
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none; margin:0}
+  select.f{cursor:pointer}
+  .r{text-align:right} .c{text-align:center} .l{text-align:left}
+  .print-only{display:none}
+
+  /* ---------- Encabezado ---------- */
+  .top{display:flex; justify-content:space-between; gap:24px; align-items:flex-start}
+  .brand{display:flex; flex-direction:column; gap:10px; min-width:0; flex:1}
+  .logo{width:170px; height:auto; display:block}
+  .company{max-width:320px; color:var(--muted); font-size:12.5px}
+  .company .f{padding:1px 4px}
+  .company .co-name{color:var(--navy); font-weight:700; font-size:14px}
+  .docbox{text-align:right; min-width:250px}
+  .doctitle{
+    font-size:28px; font-weight:800; letter-spacing:5px; color:var(--navy);
+    line-height:1; margin-bottom:12px;
+  }
+  .meta{border-collapse:collapse; margin-left:auto; font-size:13px}
+  .meta th{
+    text-align:left; color:var(--muted); font-weight:600; padding:4px 12px 4px 0;
+    text-transform:uppercase; font-size:11px; letter-spacing:.8px; white-space:nowrap;
+  }
+  .meta td{text-align:right; padding:4px 0; font-weight:600; min-width:140px}
+  .meta .f{text-align:right; font-weight:600}
+  .rule{height:3px; background:var(--navy); margin:18px 0 20px; border-radius:2px}
+
+  /* ---------- Bloques de cliente / vendedor ---------- */
+  .label{
+    font-size:11px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase;
+    color:var(--navy); margin-bottom:8px; padding-bottom:5px; border-bottom:1px solid var(--line);
+  }
+  .parties{display:grid; grid-template-columns:1.4fr 1fr; gap:28px; margin-bottom:22px}
+  .kv{display:grid; grid-template-columns:92px 1fr; align-items:baseline; gap:6px; margin:1px 0}
+  .kv > span{color:var(--muted); font-size:12px}
+  .kv.wide{grid-template-columns:130px 1fr}
+
+  /* ---------- Tabla de productos ---------- */
+  table.items{width:100%; border-collapse:collapse; table-layout:fixed}
+  .items thead th{
+    background:var(--navy); color:#fff; font-size:11px; font-weight:600; letter-spacing:.8px;
+    text-transform:uppercase; padding:9px 8px;
+  }
+  .items thead th:first-child{border-radius:6px 0 0 6px}
+  .items thead th:last-child{border-radius:0 6px 6px 0}
+  .items td{padding:7px 8px; border-bottom:1px solid var(--line); vertical-align:top}
+  .items tbody tr:nth-child(even) td{background:#fafbfc}
+  .items .idx{color:var(--muted); padding-top:9px}
+  .items .lt{font-weight:600; padding-top:9px; white-space:nowrap}
+  .del{
+    background:none; border:none; color:#c0392b; font-size:18px; line-height:1;
+    cursor:pointer; width:26px; height:26px; border-radius:50%;
+  }
+  .del:hover{background:#fdecea}
+  .add{
+    margin-top:10px; background:none; border:1px dashed #b8bfcc; color:var(--navy);
+    padding:7px 14px; border-radius:6px; font:inherit; font-weight:600; cursor:pointer;
+  }
+  .add:hover{border-color:var(--navy); background:var(--soft)}
+
+  /* ---------- Condiciones y totales ---------- */
+  .bottom{display:grid; grid-template-columns:1.25fr 1fr; gap:32px; margin-top:24px}
+  .terms .kv{grid-template-columns:130px 1fr}
+  .days{display:flex; align-items:baseline; gap:4px}
+  .days .f{width:46px}
+  .notes{margin-top:14px}
+  .sum{align-self:start}
+  .srow{
+    display:flex; justify-content:space-between; align-items:center; gap:10px;
+    padding:6px 10px; border-bottom:1px solid var(--line);
+  }
+  .srow > span:last-child{font-weight:600; white-space:nowrap}
+  .srow .tiny{width:52px; display:inline-block}
+  .srow select.f{width:auto; padding-left:0}
+  .srow.total{
+    background:var(--navy); color:#fff; border:none; border-radius:6px; margin-top:8px;
+    padding:11px 12px; font-size:16px; font-weight:800; letter-spacing:1px;
+  }
+  .muted{color:var(--muted); font-weight:400 !important}
+  .inwords{font-size:12px; color:var(--muted); margin-top:8px; padding:0 4px; font-style:italic}
+
+  /* ---------- Firmas y pie ---------- */
+  .signs{display:grid; grid-template-columns:1fr 1fr; gap:48px; margin-top:auto; padding-top:56px}
+  .sign .line{border-top:1.5px solid var(--navy); margin-bottom:6px}
+  .sign .who{font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--navy)}
+  .sign .sub{font-size:12px; color:var(--muted)}
+  .sign .f{padding-left:0}
+  .foot{
+    margin-top:26px; padding-top:10px; border-top:1px solid var(--line);
+    text-align:center; font-size:11.5px; color:var(--muted);
+  }
+  .foot strong{color:var(--navy)}
+
+  /* ---------- Celular ---------- */
+  @media (max-width:760px){
+    .sheet{padding:20px 16px; margin:0; min-height:0; box-shadow:none}
+    .top,.parties,.bottom,.signs{display:block}
+    .docbox{text-align:left; margin-top:16px}
+    .meta{margin-left:0}
+    .parties > div,.bottom > div{margin-bottom:18px}
+    .sign{margin-bottom:36px}
+    .items{font-size:12.5px}
+  }
+
+  /* ---------- Impresión / PDF ---------- */
+  @page{size:letter; margin:12mm}
+  @media print{
+    *{-webkit-print-color-adjust:exact; print-color-adjust:exact}
+    body{background:#fff; font-size:12px}
+    .toolbar,.np{display:none !important}
+    .sheet{width:auto; min-height:calc(279mm - 24mm); margin:0; padding:0; box-shadow:none}
+    .f{border:none !important; background:transparent !important; padding:0 !important}
+    .f::placeholder{color:transparent}
+    .screen-only{display:none !important}
+    .print-only{display:inline !important}
+    .is-empty,.kv.is-empty,tr.empty-row{display:none !important}
+    .items tr{break-inside:avoid}
+    .items .idx,.items .lt{padding-top:7px}
+    .bottom,.signs,.foot{break-inside:avoid}
+  }
+</style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo"><img src="nodoxlogoazul.png" style="width:180px; height:auto;" /></div>
-        <div class="header-info">
-            <p><strong>No.:</strong> <input type="text" id="quoteNumber" value="0000" class="header-input"></p>
-            <p><strong>Fecha:</strong> <input type="date" id="quoteDate" class="header-input"></p>
-        </div>
-    </div>
-    <br>
-    <h1>COTIZACIÓN</h1>
-    <br>
-    <p><strong>Cliente:</strong> <input type="text" id="clientName" placeholder="Nombre del Cliente" style="width: 300px;" class="client-name-input"></p>
 
-    <table id="main-table">
-        <colgroup>
-            <col style="width: 50%;">
-            <col style="width: 15%;">
-            <col style="width: 15%;">
-            <col style="width: 15%;">
-            <col style="width: 5%;" class="no-print">
-        </colgroup>
-        <thead>
-            <tr>
-                <th>Descripción</th>
-                <th>Cantidad</th>
-                <th>Precio Unitario</th>
-                <th>Total</th>
-                <th class="delete-cell no-print"></th>
-            </tr>
-        </thead>
-        <tbody id="table-body">
-            <tr>
-                <td><textarea class="description" placeholder="Producto o servicio" rows="1"></textarea></td>
-                <td><input type="number" class="quantity" min="0" value="0"></td>
-                <td><input type="number" class="unit-price" min="0" value="0.00" step="0.01"></td>
-                <td class="row-total">Q 0.00</td>
-                <td class="delete-cell no-print"><button class="delete-btn">×</button></td>
-            </tr>
-        </tbody>
-    </table>
+<div class="toolbar np">
+  <span class="title">Cotizaciones · Nodox</span>
+  <button class="btn" id="newBtn" title="Limpia cliente y productos y asigna el siguiente número">Nueva cotización</button>
+  <button class="btn primary" id="printBtn">Imprimir / Guardar PDF</button>
+</div>
 
-    <div class="controls-row">
-        <div class="button-row no-print">
-            <button class="row-button add-button" id="addRow">+</button>
-        </div>
-        <div class="print-button-container no-print">
-            <button class="print-button" id="printBtn">Imprimir / Guardar PDF</button>
-        </div>
+<main class="sheet">
+
+  <!-- ENCABEZADO -->
+  <header class="top">
+    <div class="brand">
+      <img src="nodoxlogoazul.png" alt="Nodox Products" class="logo" />
+      <div class="company">
+        <input class="f co-name" data-k="coName" placeholder="Nombre legal de la empresa" value="Nodox Products" />
+        <input class="f" data-k="coNit" placeholder="NIT: 0000000-0" />
+        <input class="f" data-k="coAddr" placeholder="Dirección, Ciudad de Guatemala" />
+        <input class="f" data-k="coPhone" placeholder="Tel. / WhatsApp" />
+        <input class="f" data-k="coEmail" placeholder="correo@nodox.online" />
+        <input class="f" data-k="coWeb" value="nodox.online" placeholder="Sitio web" />
+      </div>
     </div>
 
-    <p class="totals"><strong>Total: <span id="grand-total">Q 0.00</span></strong></p>
+    <div class="docbox">
+      <div class="doctitle">COTIZACIÓN</div>
+      <table class="meta">
+        <tr><th>No.</th><td><input class="f" id="qNum" /></td></tr>
+        <tr><th>Fecha</th><td>
+          <input type="date" class="f screen-only" id="qDate" />
+          <span class="print-only" id="qDateTxt"></span>
+        </td></tr>
+        <tr><th>Válida hasta</th><td id="qValid"></td></tr>
+      </table>
+    </div>
+  </header>
 
-    <div class="footer">
-        <div class="accept-box">Aceptado por:</div>
-        <div class="accept-box">Fecha de aceptación:</div>
+  <div class="rule"></div>
+
+  <!-- CLIENTE / VENDEDOR -->
+  <section class="parties">
+    <div>
+      <div class="label">Cotizado a</div>
+      <div class="kv"><span>Cliente</span><input class="f client" id="cName" placeholder="Nombre o empresa" /></div>
+      <div class="kv"><span>NIT</span><input class="f client" placeholder="NIT o C/F" /></div>
+      <div class="kv"><span>Contacto</span><input class="f client" placeholder="Persona de contacto" /></div>
+      <div class="kv"><span>Teléfono</span><input class="f client" placeholder="Teléfono" /></div>
+      <div class="kv"><span>Correo</span><input class="f client" placeholder="correo@cliente.com" /></div>
+      <div class="kv"><span>Dirección</span><input class="f client" placeholder="Dirección" /></div>
+    </div>
+    <div id="sellerBox">
+      <div class="label">Atendido por</div>
+      <div class="kv"><span>Asesor</span><input class="f" data-k="seller" placeholder="Nombre del asesor" /></div>
+      <div class="kv"><span>Teléfono</span><input class="f" data-k="sellerPhone" placeholder="Teléfono" /></div>
+      <div class="kv"><span>Correo</span><input class="f" data-k="sellerEmail" placeholder="Correo" /></div>
+    </div>
+  </section>
+
+  <!-- PRODUCTOS -->
+  <table class="items">
+    <colgroup>
+      <col style="width:5%" />
+      <col />
+      <col style="width:11%" />
+      <col style="width:9%" />
+      <col style="width:15%" />
+      <col style="width:15%" />
+      <col class="np" style="width:5%" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="c">#</th>
+        <th class="l">Descripción</th>
+        <th class="c">Unidad</th>
+        <th class="r">Cant.</th>
+        <th class="r">Precio unit.</th>
+        <th class="r">Total</th>
+        <th class="np"></th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <div class="np"><button class="add" id="addRow">+ Agregar línea</button></div>
+
+  <!-- CONDICIONES Y TOTALES -->
+  <section class="bottom">
+    <div class="terms">
+      <div class="label">Condiciones comerciales</div>
+      <div class="kv wide"><span>Validez de la oferta</span>
+        <span class="days"><input type="number" class="f r" data-k="validDays" id="validDays" min="1" value="15" /> días</span>
+      </div>
+      <div class="kv wide"><span>Forma de pago</span><input class="f" data-k="payTerms" placeholder="Ej.: 50% anticipo, 50% contra entrega" /></div>
+      <div class="kv wide"><span>Tiempo de entrega</span><input class="f" data-k="delivery" placeholder="Ej.: 5 a 7 días hábiles" /></div>
+      <div class="kv wide"><span>Garantía</span><input class="f" data-k="warranty" placeholder="Ej.: 6 meses por defectos de fábrica" /></div>
+
+      <div class="notes" id="notesWrap">
+        <div class="label">Notas</div>
+        <textarea class="f" id="notes" rows="2" placeholder="Observaciones adicionales para el cliente"></textarea>
+      </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const tableBody = document.getElementById('table-body');
+    <div class="sum">
+      <div class="srow"><span>Subtotal</span><span id="sSub">Q 0.00</span></div>
+      <div class="srow" id="discRow">
+        <span>Descuento
+          <input type="number" id="disc" class="f r tiny screen-only" min="0" max="100" step="any" value="0" /><span class="screen-only">%</span>
+          <span class="print-only" id="discTxt"></span>
+        </span>
+        <span id="sDisc">− Q 0.00</span>
+      </div>
+      <div class="srow">
+        <span>
+          <select class="f screen-only" id="ivaMode" data-k="ivaMode">
+            <option value="incl">IVA incluido (12%)</option>
+            <option value="add">IVA (12%)</option>
+            <option value="none">Exento de IVA</option>
+          </select>
+          <span class="print-only" id="ivaTxt"></span>
+        </span>
+        <span id="sIva">Q 0.00</span>
+      </div>
+      <div class="srow total"><span>TOTAL</span><span id="sTot">Q 0.00</span></div>
+      <div class="inwords" id="words"></div>
+    </div>
+  </section>
 
-            // Ajustar altura de textarea automáticamente
-            function autoResize(textarea) {
-                textarea.style.height = 'auto';
-                textarea.style.height = textarea.scrollHeight + 'px';
-            }
+  <!-- FIRMAS -->
+  <section class="signs">
+    <div class="sign">
+      <div class="line"></div>
+      <div class="who">Elaborado por</div>
+      <div class="sub" id="sellerSign"></div>
+    </div>
+    <div class="sign">
+      <div class="line"></div>
+      <div class="who">Aceptado por</div>
+      <div class="sub">Nombre, firma y sello del cliente<br>Fecha: ____ / ____ / ______</div>
+    </div>
+  </section>
 
-            function calculateGrandTotal() {
-                let grandTotal = 0;
-                document.querySelectorAll('#table-body tr').forEach(row => {
-                    const qty = parseFloat(row.querySelector('.quantity').value) || 0;
-                    const price = parseFloat(row.querySelector('.unit-price').value) || 0;
-                    const total = qty * price;
-                    row.querySelector('.row-total').textContent = `Q ${total.toFixed(2)}`;
-                    grandTotal += total;
-                });
-                document.getElementById('grand-total').textContent = `Q ${grandTotal.toFixed(2)}`;
-            }
+  <footer class="foot">
+    <strong>Gracias por su preferencia.</strong> <span id="footContact"></span>
+  </footer>
+</main>
 
-            function initRowEvents(row) {
-                const area = row.querySelector('.description');
-                area.addEventListener('input', () => autoResize(area));
-                
-                row.querySelector('.quantity').addEventListener('input', calculateGrandTotal);
-                row.querySelector('.unit-price').addEventListener('input', calculateGrandTotal);
-                
-                row.querySelector('.delete-btn').addEventListener('click', () => {
-                    if (document.querySelectorAll('#table-body tr').length > 1) {
-                        row.remove();
-                        calculateGrandTotal();
-                    }
-                });
-            }
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const $ = (s, el = document) => el.querySelector(s);
+  const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+  const PREFIX = 'nodoxCotiz.';
 
-            document.getElementById('addRow').addEventListener('click', () => {
-                const newRow = document.createElement('tr');
-                newRow.innerHTML = `
-                    <td><textarea class="description" placeholder="Producto o servicio" rows="1"></textarea></td>
-                    <td><input type="number" class="quantity" min="0" value="0"></td>
-                    <td><input type="number" class="unit-price" min="0" value="0.00" step="0.01"></td>
-                    <td class="row-total">Q 0.00</td>
-                    <td class="delete-cell no-print"><button class="delete-btn">×</button></td>
-                `;
-                tableBody.appendChild(newRow);
-                initRowEvents(newRow);
-            });
+  /* ---------- Almacenamiento local (datos fijos de la empresa) ---------- */
+  const store = {
+    get(k){ try { return localStorage.getItem(PREFIX + k); } catch(e){ return null; } },
+    set(k, v){ try { localStorage.setItem(PREFIX + k, v); } catch(e){} }
+  };
 
-            document.getElementById('printBtn').addEventListener('click', () => {
-                // Ajustar todos los textareas antes de imprimir
-                document.querySelectorAll('textarea.description').forEach(autoResize);
-                window.print();
-            });
+  /* ---------- Formatos ---------- */
+  const money = n => 'Q ' + (n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const num = el => parseFloat(el && el.value) || 0;
+  const localToday = () => {
+    const d = new Date();
+    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    return d.toISOString().slice(0, 10);
+  };
+  const parseISO = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+  const longDate = d => d.toLocaleDateString('es-GT', { day: 'numeric', month: 'long', year: 'numeric' });
 
-            // Inicializar filas existentes
-            document.querySelectorAll('#table-body tr').forEach(initRowEvents);
-            document.getElementById('quoteDate').value = new Date().toISOString().split('T')[0];
-        });
-    </script>
+  /* ---------- Monto en letras ---------- */
+  function enLetras(monto){
+    const U = ['', 'uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez',
+      'once', 'doce', 'trece', 'catorce', 'quince', 'dieciséis', 'diecisiete', 'dieciocho', 'diecinueve',
+      'veinte', 'veintiuno', 'veintidós', 'veintitrés', 'veinticuatro', 'veinticinco', 'veintiséis',
+      'veintisiete', 'veintiocho', 'veintinueve'];
+    const D = ['', '', '', 'treinta', 'cuarenta', 'cincuenta', 'sesenta', 'setenta', 'ochenta', 'noventa'];
+    const C = ['', 'ciento', 'doscientos', 'trescientos', 'cuatrocientos', 'quinientos', 'seiscientos',
+      'setecientos', 'ochocientos', 'novecientos'];
+    const apoc = s => s.replace(/veintiuno$/, 'veintiún').replace(/uno$/, 'un');
+    const m100 = n => n < 30 ? U[n] : D[Math.floor(n / 10)] + (n % 10 ? ' y ' + U[n % 10] : '');
+    const m1000 = n => {
+      if (n === 100) return 'cien';
+      const c = Math.floor(n / 100), r = n % 100;
+      return [c ? C[c] : '', r ? m100(r) : ''].filter(Boolean).join(' ');
+    };
+    const miles = n => {
+      const t = Math.floor(n / 1000), r = n % 1000;
+      const a = t ? (t === 1 ? 'mil' : apoc(m1000(t)) + ' mil') : '';
+      return [a, r ? m1000(r) : ''].filter(Boolean).join(' ');
+    };
+    const cents = Math.round(monto * 100);
+    const ent = Math.floor(cents / 100), cc = cents % 100;
+    const mill = Math.floor(ent / 1e6), resto = ent % 1e6;
+    let s = mill ? (mill === 1 ? 'un millón' : apoc(miles(mill)) + ' millones') : '';
+    if (resto) s += (s ? ' ' : '') + miles(resto);
+    if (!s) s = 'cero';
+    if (mill && !resto) s += ' de';
+    s = apoc(s);
+    const unidad = ent === 1 ? 'quetzal' : 'quetzales';
+    return 'Son: ' + s.charAt(0).toUpperCase() + s.slice(1) + ' ' + unidad + ' con ' + String(cc).padStart(2, '0') + '/100';
+  }
+
+  /* ---------- Utilidades de campos ---------- */
+  function autoResize(t){ t.style.height = 'auto'; t.style.height = t.scrollHeight + 'px'; }
+  function markEmpty(el){
+    const empty = !String(el.value || '').trim();
+    el.classList.toggle('is-empty', empty);
+    const kv = el.closest('.kv');
+    if (kv) kv.classList.toggle('is-empty', !$$('.f', kv).some(f => String(f.value || '').trim()));
+  }
+
+  // Campos que se recuerdan entre cotizaciones (empresa, asesor, condiciones)
+  $$('[data-k]').forEach(el => {
+    const saved = store.get(el.dataset.k);
+    if (saved !== null) el.value = saved;
+    el.addEventListener('input', () => { store.set(el.dataset.k, el.value); refresh(); });
+    el.addEventListener('change', () => { store.set(el.dataset.k, el.value); refresh(); });
+  });
+
+  /* ---------- Numeración automática ---------- */
+  function nextNumber(){
+    const n = parseInt(store.get('nextNum') || '1', 10);
+    const year = ($('#qDate').value || localToday()).slice(0, 4);
+    return `COT-${year}-${String(n).padStart(4, '0')}`;
+  }
+  function commitNumber(){
+    const m = $('#qNum').value.match(/(\d+)\s*$/);
+    if (!m) return;
+    const used = parseInt(m[1], 10);
+    const next = parseInt(store.get('nextNum') || '1', 10);
+    if (used >= next) store.set('nextNum', String(used + 1));
+  }
+
+  /* ---------- Filas ---------- */
+  const tbody = $('#rows');
+  function addRow(focus){
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="c idx"></td>
+      <td><textarea class="f desc" rows="1" placeholder="Producto o servicio"></textarea></td>
+      <td><input class="f c unit" value="unidad" placeholder="unidad" /></td>
+      <td><input type="number" class="f r qty" min="0" step="any" value="1" inputmode="decimal" /></td>
+      <td>
+        <input type="number" class="f r price screen-only" min="0" step="0.01" placeholder="0.00" inputmode="decimal" />
+        <span class="print-only priceTxt" style="display:none;float:right"></span>
+      </td>
+      <td class="r lt">Q 0.00</td>
+      <td class="np c"><button class="del" title="Eliminar línea">×</button></td>`;
+    tbody.appendChild(tr);
+    const desc = $('.desc', tr);
+    desc.addEventListener('input', () => { autoResize(desc); refresh(); });
+    $$('input', tr).forEach(i => i.addEventListener('input', refresh));
+    $('.del', tr).addEventListener('click', () => {
+      if ($$('tr', tbody).length > 1) tr.remove();
+      else { desc.value = ''; $('.price', tr).value = ''; $('.qty', tr).value = 1; }
+      refresh();
+    });
+    refresh();
+    if (focus) desc.focus();
+  }
+
+  /* ---------- Cálculo y textos ---------- */
+  function refresh(){
+    let sub = 0;
+    $$('tr', tbody).forEach((tr, i) => {
+      const qty = num($('.qty', tr)), price = num($('.price', tr));
+      const t = qty * price;
+      sub += t;
+      $('.idx', tr).textContent = i + 1;
+      $('.lt', tr).textContent = money(t);
+      $('.priceTxt', tr).textContent = money(price);
+      const empty = !$('.desc', tr).value.trim() && !price;
+      tr.classList.toggle('empty-row', empty);
+    });
+
+    const pct = Math.min(Math.max(num($('#disc')), 0), 100);
+    const disc = sub * pct / 100;
+    const base = sub - disc;
+    const mode = $('#ivaMode').value;
+    let iva = 0, total = base;
+    if (mode === 'add'){ iva = base * 0.12; total = base + iva; }
+    else if (mode === 'incl'){ iva = base - base / 1.12; }
+
+    $('#sSub').textContent = money(sub);
+    $('#sDisc').textContent = '− ' + money(disc);
+    $('#discTxt').textContent = pct ? `(${pct}%)` : '';
+    $('#discRow').classList.toggle('is-empty', !pct);
+    $('#ivaTxt').textContent = $('#ivaMode').selectedOptions[0].text;
+    $('#sIva').textContent = money(iva);
+    $('#sIva').classList.toggle('muted', mode === 'incl');
+    $('#sTot').textContent = money(total);
+    $('#words').textContent = enLetras(total);
+
+    // Fechas
+    const dateVal = $('#qDate').value || localToday();
+    const d = parseISO(dateVal);
+    $('#qDateTxt').textContent = longDate(d);
+    const days = Math.max(parseInt($('#validDays').value, 10) || 0, 0);
+    const v = new Date(d); v.setDate(v.getDate() + days);
+    $('#qValid').textContent = longDate(v);
+
+    // Firma y pie
+    const val = k => ($(`[data-k="${k}"]`).value || '').trim();
+    $('#sellerSign').textContent = [val('seller'), val('coName')].filter(Boolean).join(' · ') || 'Nombre y firma';
+    $('#footContact').textContent = [val('coPhone'), val('coEmail'), val('coWeb')].filter(Boolean).join('  ·  ');
+    $('#notesWrap').classList.toggle('is-empty', !$('#notes').value.trim());
+    $('#sellerBox').classList.toggle('is-empty', !['seller','sellerPhone','sellerEmail'].some(val));
+
+    $$('.f').forEach(markEmpty);
+  }
+
+  /* ---------- Impresión ---------- */
+  const baseTitle = document.title;
+  function beforePrint(){
+    $$('textarea').forEach(autoResize);
+    refresh();
+    const client = $('#cName').value.trim();
+    document.title = ['Cotización', $('#qNum').value, client].filter(Boolean).join(' - ');
+  }
+  window.addEventListener('beforeprint', beforePrint);
+  window.addEventListener('afterprint', () => { document.title = baseTitle; commitNumber(); });
+  $('#printBtn').addEventListener('click', () => { beforePrint(); window.print(); });
+
+  /* ---------- Nueva cotización ---------- */
+  $('#newBtn').addEventListener('click', () => {
+    if (!confirm('¿Empezar una cotización nueva? Se borrarán el cliente, los productos y las notas.')) return;
+    commitNumber();
+    $$('.client').forEach(i => i.value = '');
+    $('#notes').value = '';
+    $('#disc').value = 0;
+    tbody.innerHTML = '';
+    $('#qDate').value = localToday();
+    $('#qNum').value = nextNumber();
+    addRow(true);
+  });
+
+  /* ---------- Eventos generales ---------- */
+  $('#addRow').addEventListener('click', () => addRow(true));
+  ['#qDate', '#disc', '#qNum'].forEach(s => $(s).addEventListener('input', refresh));
+  $$('.client').forEach(i => i.addEventListener('input', refresh));
+  $('#notes').addEventListener('input', e => { autoResize(e.target); refresh(); });
+
+  /* ---------- Inicio ---------- */
+  $('#qDate').value = localToday();
+  $('#qNum').value = nextNumber();
+  addRow(false);
+});
+</script>
 </body>
 </html>
